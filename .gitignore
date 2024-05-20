@@ -9,3 +9,6 @@ node_modules/
 
 # Ignora la carpeta dist
 dist/
+
+# .env files
+.env
