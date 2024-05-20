@@ -1,0 +1,11 @@
+# Ignora el archivo mysql.sock
+apps/api-demo/mysql/mysql.sock
+
+# Ignora la carpeta node_modules
+node_modules/
+
+# Ignora los archivos de log
+*.log
+
+# Ignora la carpeta dist
+dist/

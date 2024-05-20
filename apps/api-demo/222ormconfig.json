@@ -1,0 +1,14 @@
+{
+    "type": "mysql",
+    "host": "localhost",
+    "port": 3307,
+    "username": "user_crud",
+    "password": "root",
+    "database": "db_crud",
+    "entities": ["dist/**/*.entity{.ts,.js}"],
+    "synchronize": true,
+    "extra": {
+      "allowPublicKeyRetrieval": true,
+      "insecureAuth" : true
+    }
+  }
