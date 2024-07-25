@@ -12,3 +12,9 @@ dist/
 
 # .env files
 **/.env
+
+# .turbo files
+.turbo/daemon/
+.turbo/cookies/
+apps/api-demo/mysql
+
