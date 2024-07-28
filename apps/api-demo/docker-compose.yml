@@ -1,15 +1,16 @@
-version: "3.9"
+version: '3.8'
+
 services:
-  mysql:
-    image: mysql:8.0
-    container_name: mysql_db
-    restart: always
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: db_crud
-      MYSQL_USER: user_crud
-      MYSQL_PASSWORD: root
-    volumes:
-      - ./mysql:/var/lib/mysql
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password123
     ports:
-      - "3307:3306"
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
