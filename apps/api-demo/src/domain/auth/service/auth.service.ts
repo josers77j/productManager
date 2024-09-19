@@ -1,26 +1,53 @@
-import { Injectable } from '@nestjs/common';
-import { CreateAuthDto } from './dto/create-auth.dto';
-import { UpdateAuthDto } from './dto/update-auth.dto';
-
+import { BadRequestException, Injectable, UnauthorizedException } from "@nestjs/common";
+import { UsersService } from "src/domain/users/service/users.service";
+import { RegisterDto } from "../dto/register.dto";
+import * as bcryptjs from "bcryptjs";
+import { LoginDto } from "../entities/auth.entity";
+import { JwtService } from "@nestjs/jwt";
 @Injectable()
 export class AuthService {
-  create(createAuthDto: CreateAuthDto) {
-    return 'This action adds a new auth';
+  constructor(private readonly usersService: UsersService,
+    private readonly jwtService: JwtService) {}
+  async register({ password, email, name, lastname }: RegisterDto) {
+    //const user = await this.usersService.findOneByEmail(email);
+const user = '';
+    if (user) {
+      throw new BadRequestException("Email already exists");
+    }
+
+    //const hashedPassword = await bcryptjs.hash(password, 10);
+
+    // await this.usersService.create({
+    //   name,
+    //   email,
+    //   lastname,
+    //   password: hashedPassword,
+    // });
+
+    return {
+      message: "User created successfully",
+    };
   }
 
-  findAll() {
-    return `This action returns all auth`;
-  }
+  async login({ username, password }: LoginDto) {
+    // const user = await this.usersService.findOneByEmail(username);
 
-  findOne(id: number) {
-    return `This action returns a #${id} auth`;
-  }
+    // if (!user) {
+    //   throw new UnauthorizedException("Invalid email");
+    // }
 
-  update(id: number, updateAuthDto: UpdateAuthDto) {
-    return `This action updates a #${id} auth`;
-  }
+    // const isPasswordValid = await bcryptjs.compare(password, user.password);
 
-  remove(id: number) {
-    return `This action removes a #${id} auth`;
+    // if (!isPasswordValid) {
+    //   throw new UnauthorizedException("Invalid password");
+    // }
+    // const payload = { email: user.email };
+
+    // const token = await this.jwtService.signAsync(payload);
+
+    // return {
+    //   token: token,
+    //   email: user.email,
+    // };
   }
 }
