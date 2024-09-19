@@ -18,3 +18,5 @@ dist/
 .turbo/cookies/
 apps/api-demo/mysql
 
+apps/api-demo/.env
+apps/api-demo/.env
