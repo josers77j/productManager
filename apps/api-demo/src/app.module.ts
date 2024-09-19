@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { routes } from './routes/routes';
 import { AuthModule } from './domain/auth/auth.module';
+import { PrismaService } from 'prisma/prisma.service';
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
@@ -27,12 +28,12 @@ import { AuthModule } from './domain/auth/auth.module';
         password: process.env.DB_PASSWORD,
         database: process.env.DB_NAME,
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
     }),
     UsersModule,
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
