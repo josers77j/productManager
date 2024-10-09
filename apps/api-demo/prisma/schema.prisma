@@ -14,12 +14,48 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  password  String
-  email     String   @unique
-  active    Boolean
-  name      String   @db.VarChar(500)
-  lastname  String   @db.VarChar(500)
-  roleId    Int
-  deletedAt DateTime? @map("deleted_at")
+  user_id    Int      @id @default(autoincrement())
+  username   String   @unique
+  email      String   @unique
+  password   String
+  created_at DateTime @default(now())
+
+  roles UsersRoles[]  // Relación con tabla intermedia de roles
+}
+
+model Role {
+  role_id    Int      @id @default(autoincrement())
+  role_name  String   @unique
+  description String?
+
+  users  UsersRoles[]  // Relación con tabla intermedia de usuarios
+  permissions RolesPermissions[]  // Relación con tabla intermedia de permisos
+}
+
+model Permission {
+  permission_id Int    @id @default(autoincrement())
+  permission_name String @unique
+  description    String?
+
+  roles RolesPermissions[]  // Relación con tabla intermedia de roles
+}
+
+model UsersRoles {
+  user_id Int
+  role_id Int
+
+  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
+  role Role @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+
+  @@id([user_id, role_id]) // Clave primaria compuesta
+}
+
+model RolesPermissions {
+  role_id      Int
+  permission_id Int
+
+  role      Role      @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+  permission Permission @relation(fields: [permission_id], references: [permission_id], onDelete: Cascade)
+
+  @@id([role_id, permission_id])  // Clave primaria compuesta
 }
