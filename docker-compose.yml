@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+      POSTGRES_DB: managerDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s   # Intervalo entre chequeos
+      timeout: 5s     # Tiempo máximo que espera antes de dar timeout
+      retries: 5      # Intentos de reconexión antes de marcarlo como fallo
+    restart: always   # Reinicia el contenedor en caso de que falle
+
+  app:
+    build:
+      context: .
+    container_name: monorepo_app
+    environment:
+      DATABASE_URL: postgres://admin:password123@postgres:5432/managerDB
+    depends_on:
+      postgres:
+        condition: service_healthy # Espera a que postgres esté "saludable"
+    ports:
+      - "3000:3000"  # Puerto para backend
+      - "5173:5173"  # Puerto para frontend
+    command: npm run dev
+    volumes:
+      - .:/app
+    working_dir: /app
+    restart: always   # Reinicia el contenedor en caso de que falle
+
+volumes:
+  postgres-data:
