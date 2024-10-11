@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   postgres:
-    image: postgres:15  # Cambiar a la versión 15
+    image: postgres:15
     restart: always
     environment:
       POSTGRES_DB: managerDB
@@ -18,8 +18,14 @@ services:
       - postgres
     environment:
       DATABASE_URL: postgres://admin:password123@postgres:5432/managerDB
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: managerDB
+      DB_USERNAME: admin
+      DB_PASSWORD: password123
     ports:
       - "3001:3001"
+    command: ["./wait-for-postgres.sh", "npm", "run", "dev"]
 
   frontend-service:
     build:
@@ -27,3 +33,5 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
+    depends_on:
+      - backend-service

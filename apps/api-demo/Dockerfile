@@ -22,6 +22,5 @@ COPY wait-for-postgres.sh ./
 # Da permisos de ejecución al script
 RUN chmod +x wait-for-postgres.sh
 
-
 # Usa el script de espera antes de iniciar tu aplicación
 CMD ["./wait-for-postgres.sh", "npm", "run", "dev"]

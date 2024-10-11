@@ -4,7 +4,7 @@ FROM node:20
 # Establece el directorio de trabajo
 WORKDIR /apps/client-demo
 
-# Copia solo los archivos necesarios
+# Copia los archivos de package.json y package-lock.json (si existe)
 COPY package*.json ./
 
 # Instala las dependencias del frontend

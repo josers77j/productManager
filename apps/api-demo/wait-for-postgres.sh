@@ -3,14 +3,17 @@
 # Script para esperar a que Postgres esté disponible
 set -e
 
-# Reemplaza las variables por las que estés usando
+# Variables de entorno
 DB_HOST="${DB_HOST:-postgres}"
-DB_USERNAME="${DB_USERNAME:-admin}"
-DB_DATABASE="${DB_DATABASE:-managerDB}"
+DB_PORT="${DB_PORT:-5432}"
 
-until nc -z "$DB_HOST" 5432; do
+echo "Esperando a que Postgres esté disponible en $DB_HOST:$DB_PORT..."
+
+# Intentar conectarse al puerto de Postgres
+until nc -z "$DB_HOST" "$DB_PORT"; do
   >&2 echo "Postgres no está disponible, esperando..."
   sleep 1
 done
 
->&2 echo "Postgres está disponible."
+>&2 echo "Postgres está disponible en $DB_HOST:$DB_PORT, comenzando la aplicación."
+exec "$@"
