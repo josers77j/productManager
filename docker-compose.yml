@@ -26,7 +26,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
-       - ./src:/app/src
+        - ./apps/api-demo:/usr/src/app
+        - /usr/src/app/node_modules 
     command: ["./wait-for-postgres.sh", "npm", "run", "dev"]
 
   frontend-service:
@@ -38,4 +39,5 @@ services:
     depends_on:
       - backend-service
     volumes:
-      - ./src:/app/src
+      - ./apps/client-demo:/usr/src/app
+      - /usr/src/app/node_modules

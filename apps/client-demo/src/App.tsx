@@ -10,7 +10,7 @@ function App() {
       console.log('jolaaaa');
       
     }}>
-      click me
+      click meeee
     </button>
   )
 }
