@@ -1,0 +1,43 @@
+version: '3.8'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    environment:
+      POSTGRES_DB: managerDB
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+
+  backend-service:
+    build:
+      context: ./apps/api-demo
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://admin:password123@postgres:5432/managerDB
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: managerDB
+      DB_USERNAME: admin
+      DB_PASSWORD: password123
+    ports:
+      - "5000:5000"
+    volumes:
+        - ./apps/api-demo:/usr/src/app
+        - /usr/src/app/node_modules 
+    command: ["./wait-for-postgres.sh", "npm", "run", "dev"]
+
+  frontend-service:
+    build:
+      context: ./apps/client-demo
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend-service
+    volumes:
+      - ./apps/client-demo:/usr/src/app
+      - /usr/src/app/node_modules

@@ -25,7 +25,7 @@ const user = '';
     // });
 
     return {
-      message: "User created successfully",
+      message: "User created successfully :D",
     };
   }
 
