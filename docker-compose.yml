@@ -24,7 +24,9 @@ services:
       DB_USERNAME: admin
       DB_PASSWORD: password123
     ports:
-      - "3001:3001"
+      - "5000:5000"
+    volumes:
+       - ./src:/app/src
     command: ["./wait-for-postgres.sh", "npm", "run", "dev"]
 
   frontend-service:
@@ -32,6 +34,8 @@ services:
       context: ./apps/client-demo
       dockerfile: Dockerfile
     ports:
-      - "3000:3000"
+      - "5173:5173"
     depends_on:
       - backend-service
+    volumes:
+      - ./src:/app/src

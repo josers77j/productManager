@@ -2,19 +2,20 @@
 FROM node:20
 
 # Establece el directorio de trabajo
-WORKDIR /apps/client-demo
+WORKDIR /usr/src/app
 
 # Copia los archivos de package.json y package-lock.json (si existe)
 COPY package*.json ./
 
 # Instala las dependencias del frontend
-RUN npm install --legacy-peer-deps
+RUN npm install
 
 # Copia el resto del código del frontend
 COPY . .
 
-# Exponer el puerto en el que correrá el servidor
-EXPOSE 3000
+RUN npm run build
 
-# Comando para ejecutar la aplicación en modo desarrollo
+# Exponer el puerto en el que correrá el servidor
+EXPOSE 5173
+
 CMD ["npm", "run", "dev"]
