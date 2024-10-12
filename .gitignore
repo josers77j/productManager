@@ -12,6 +12,8 @@ dist/
 
 # .env files
 **/.env
+.env
+
 gplo main                                                                                             ░▒▓ ✔  08:43:27 ▓▒░
 remote: Enumerating objects: 8, done.
 remote: Counting objects: 100% (7/7), done.
@@ -39,6 +41,7 @@ fatal: Necesita especificar cómo reconciliar las ramas divergentes..env
 .turbo/cookies/
 apps/api-demo/mysql
 
+apps/api-demo/.env
 apps/api-demo/.env
 apps/api-demo/.env
 apps/api-demo/.env
