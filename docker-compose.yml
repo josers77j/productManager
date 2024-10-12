@@ -24,7 +24,7 @@ services:
       DB_USERNAME: admin
       DB_PASSWORD: password123
     ports:
-      - "5000:5000"
+      - "5001:5001"
     volumes:
         - ./apps/api-demo:/usr/src/app
         - /usr/src/app/node_modules 
