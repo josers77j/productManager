@@ -14,18 +14,20 @@ datasource db {
 }
 
 model User {
-  user_id    Int      @id @default(autoincrement())
+  userId    Int      @id @default(autoincrement())
   username   String   @unique
   email      String   @unique
   password   String
-  created_at DateTime @default(now())
+  createdAt DateTime @default(now())
+  deleteAt DateTime?
+
 
   roles UsersRoles[]  // Relación con tabla intermedia de roles
 }
 
 model Role {
-  role_id    Int      @id @default(autoincrement())
-  role_name  String   @unique
+  roleId    Int      @id @default(autoincrement())
+  roleName  String   @unique
   description String?
 
   users  UsersRoles[]  // Relación con tabla intermedia de usuarios
@@ -33,29 +35,29 @@ model Role {
 }
 
 model Permission {
-  permission_id Int    @id @default(autoincrement())
-  permission_name String @unique
+  permissionId Int    @id @default(autoincrement())
+  permissionName String @unique
   description    String?
 
   roles RolesPermissions[]  // Relación con tabla intermedia de roles
 }
 
 model UsersRoles {
-  user_id Int
-  role_id Int
+  userId Int
+  roleId Int
 
-  user User @relation(fields: [user_id], references: [user_id], onDelete: Cascade)
-  role Role @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
 
-  @@id([user_id, role_id]) // Clave primaria compuesta
+  @@id([userId, roleId]) // Clave primaria compuesta
 }
 
 model RolesPermissions {
-  role_id      Int
-  permission_id Int
+  roleId      Int
+  permissionId Int
 
-  role      Role      @relation(fields: [role_id], references: [role_id], onDelete: Cascade)
-  permission Permission @relation(fields: [permission_id], references: [permission_id], onDelete: Cascade)
+  role      Role      @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [permissionId], onDelete: Cascade)
 
-  @@id([role_id, permission_id])  // Clave primaria compuesta
+  @@id([roleId, permissionId])  // Clave primaria compuesta
 }
