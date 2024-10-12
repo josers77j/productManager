@@ -6,8 +6,14 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.setGlobalPrefix('api/v1');
+  const port = +process.env.PORT || 3001;
 
+  app.enableCors();
+
+  const globalPrefix = 'api/v1';
+
+  app.setGlobalPrefix(globalPrefix);
+  
    // Configuración de Swagger
    const config = new DocumentBuilder()
    .setTitle('API de Usuarios')
@@ -28,7 +34,10 @@ async function bootstrap() {
       transform: true,
     }),
   )
-  await app.listen(3000);
+ 
+await app.listen(port , () => {
+  console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+});
 
 }
 bootstrap();
