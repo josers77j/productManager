@@ -12,11 +12,33 @@ dist/
 
 # .env files
 **/.env
-
+gplo main                                                                                             ░▒▓ ✔  08:43:27 ▓▒░
+remote: Enumerating objects: 8, done.
+remote: Counting objects: 100% (7/7), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 4 (delta 1), reused 0 (delta 0), pack-reused 0 (from 0)
+Desempaquetando objetos: 100% (4/4), 1.78 KiB | 607.00 KiB/s, listo.
+Desde github.com:josers77j/productManager
+ * branch            main       -> FETCH_HEAD
+ + a2d3f4c...1cefb53 main       -> origin/main  (actualización forzada)
+ayuda: Hacer un pull sin especificar cómo reconciliar las ramas es poco
+ayuda: recomendable. Puedes eliminar este mensaje usando uno de los
+ayuda: siguientes comandos antes de tu siguiente pull:
+ayuda: 
+ayuda:   git config pull.rebase false  # hacer merge (estrategia por defecto)
+ayuda:   git config pull.rebase true   # aplicar rebase
+ayuda:   git config pull.ff only       # aplicar solo fast-forward
+ayuda: 
+ayuda: Puedes reemplazar "git config" con "git config --global" para aplicar
+ayuda: la preferencia en todos los repositorios. Puedes también pasar --rebase,
+ayuda: --no-rebase, o --ff-only en el comando para sobrescribir la configuración
+ayuda: por defecto en cada invocación.
+fatal: Necesita especificar cómo reconciliar las ramas divergentes..env
 # .turbo files
 .turbo/daemon/
 .turbo/cookies/
 apps/api-demo/mysql
 
+apps/api-demo/.env
 apps/api-demo/.env
 apps/api-demo/.env
