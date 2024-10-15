@@ -14,50 +14,61 @@ datasource db {
 }
 
 model User {
-  userId    Int      @id @default(autoincrement())
-  username   String   @unique
-  email      String   @unique
-  password   String
-  createdAt DateTime @default(now())
-  deleteAt DateTime?
+  id        Int       @id @default(autoincrement())
+  username  String    @unique
+  name      String   @default("")
+  lastName  String    @default("")
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  deleteAt  DateTime?
+  roleId    Int?     
 
+  auditLogs AuditLog[] // Relación uno a muchos con logs de auditoría
 
-  roles UsersRoles[]  // Relación con tabla intermedia de roles
+  role Role? @relation(fields: [roleId], references: [id])
 }
 
 model Role {
-  roleId    Int      @id @default(autoincrement())
-  roleName  String   @unique
-  description String?
+  id   Int    @id @default(autoincrement())
+  name String @unique
 
-  users  UsersRoles[]  // Relación con tabla intermedia de usuarios
-  permissions RolesPermissions[]  // Relación con tabla intermedia de permisos
+  users       User[] // Relación uno a muchos con usuarios
+  permissions RolePermission[] // Relación muchos a muchos con permisos
 }
 
 model Permission {
-  permissionId Int    @id @default(autoincrement())
-  permissionName String @unique
-  description    String?
+  id          Int     @id @default(autoincrement())
+  action      String
+  description String?
+  resourceId  Int
 
-  roles RolesPermissions[]  // Relación con tabla intermedia de roles
+  resource Resource         @relation(fields: [resourceId], references: [id])
+  roles    RolePermission[] // Relación muchos a muchos con roles
 }
 
-model UsersRoles {
-  userId Int
-  roleId Int
-
-  user User @relation(fields: [userId], references: [userId], onDelete: Cascade)
-  role Role @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
-
-  @@id([userId, roleId]) // Clave primaria compuesta
-}
-
-model RolesPermissions {
-  roleId      Int
+model RolePermission {
+  id           Int @id @default(autoincrement())
+  roleId       Int
   permissionId Int
 
-  role      Role      @relation(fields: [roleId], references: [roleId], onDelete: Cascade)
-  permission Permission @relation(fields: [permissionId], references: [permissionId], onDelete: Cascade)
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
 
-  @@id([roleId, permissionId])  // Clave primaria compuesta
+  @@unique([roleId, permissionId]) // Clave compuesta para evitar duplicados
+}
+
+model Resource {
+  id          Int          @id @default(autoincrement())
+  name        String
+  permissions Permission[] // Relación uno a muchos con permisos
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  action    String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
 }

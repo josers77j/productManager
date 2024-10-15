@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { Logger, ValidationPipe } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
@@ -36,7 +36,7 @@ async function bootstrap() {
   )
  
 await app.listen(port , () => {
-  console.log('Listening at http://localhost:' + port + '/' + globalPrefix);
+  Logger.log('Listening at http://localhost:' + port + '/' + globalPrefix);
 });
 
 }

@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { routes } from './routes/routes';
 import { AuthModule } from './domain/auth/auth.module';
 import { PrismaService } from 'prisma/prisma.service';
+
 @Module({
   imports: [
     ConfigModule.forRoot({isGlobal: true}),
