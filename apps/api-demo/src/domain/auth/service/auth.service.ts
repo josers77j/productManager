@@ -17,13 +17,13 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('Invalid username');
     }
-    console.log('user', user);
+    
     const isPasswordValid = await bcryptjs.compare(password, user.password);
-    console.log('isPasswordValid', isPasswordValid);
+    
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
-    const payload = { email: user.email };
+    const payload = { email: user.email, username: user.username, name: user.name, lastName: user.lastName };
 
     const token = await this.jwtService.signAsync(payload);
 
