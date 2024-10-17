@@ -1,17 +1,20 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
 import { UsersService } from '../service/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { passwordUserDto } from '../dto/password-user.dto';
 import { RoledUserDto } from '../dto/role-user.dto';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  getUsers() {
-    return this.usersService.getUsers();
+  getUsers(
+    @Query() paginationDto : PaginationDto
+  ) {
+    return this.usersService.getUsers(paginationDto);
   }
 
   @Post()

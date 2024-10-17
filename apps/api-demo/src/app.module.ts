@@ -11,6 +11,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { routes } from './routes/routes';
 import { AuthModule } from './domain/auth/auth.module';
 import { PrismaService } from 'prisma/prisma.service';
+import { RolesModule } from './domain/roles/roles.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { PrismaService } from 'prisma/prisma.service';
     }),
     UsersModule,
     AuthModule,
+    RolesModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

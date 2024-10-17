@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../repository/users.repository';
@@ -6,7 +6,7 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 import { passwordUserDto } from '../dto/password-user.dto';
 import { RoledUserDto } from '../dto/role-user.dto';
-
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 @Injectable()
 export class UsersService {
   constructor(
@@ -16,19 +16,19 @@ export class UsersService {
     try {
       const process = await this.userRepository.findOneByUserName(username);
       if (!process) 
-        throw new UnprocessableEntityException('Ocurrio un error al obtener el usuario');
+        throw new NotFoundException('No se encontro el usuario o el usuario fue eliminado');
       return process;
     } catch (err) {
       Logger.error(err);
-      if(err instanceof UnprocessableEntityException)
+      if(err instanceof NotFoundException)
         throw err;
       throw new InternalServerErrorException('Error al obtener el usuario');
     }
   }
 
-  async getUsers() {
+  async getUsers(paginationDto: PaginationDto) {
     try {
-      const process = await this.userRepository.getUsers();
+      const process = await this.userRepository.getUsers(paginationDto);
       if (!process) 
         throw new UnprocessableEntityException('Ocurrio un error al obtener los usuarios');
       return process;

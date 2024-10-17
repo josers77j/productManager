@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
+model user {
   id        Int       @id @default(autoincrement())
   username  String    @unique
   name      String   @default("")
@@ -24,51 +24,52 @@ model User {
   deleteAt  DateTime?
   roleId    Int?     
 
-  auditLogs AuditLog[] // Relación uno a muchos con logs de auditoría
+  auditLogs auditLog[] // Relación uno a muchos con logs de auditoría
 
-  role Role? @relation(fields: [roleId], references: [id])
+  role role? @relation(fields: [roleId], references: [id])
 }
 
-model Role {
+model role {
   id   Int    @id @default(autoincrement())
   name String @unique
 
-  users       User[] // Relación uno a muchos con usuarios
-  permissions RolePermission[] // Relación muchos a muchos con permisos
+  users       user[] // Relación uno a muchos con usuarios
+  permissions rolePermission[] // Relación muchos a muchos con permisos
 }
 
-model Permission {
+model permission {
   id          Int     @id @default(autoincrement())
   action      String
   description String?
   resourceId  Int
 
-  resource Resource         @relation(fields: [resourceId], references: [id])
-  roles    RolePermission[] // Relación muchos a muchos con roles
+  resource resource         @relation(fields: [resourceId], references: [id])
+  roles    rolePermission[] // Relación muchos a muchos con roles
 }
 
-model RolePermission {
+model rolePermission {
   id           Int @id @default(autoincrement())
   roleId       Int
   permissionId Int
 
-  role       Role       @relation(fields: [roleId], references: [id])
-  permission Permission @relation(fields: [permissionId], references: [id])
+  role       role       @relation(fields: [roleId], references: [id])
+  permission permission @relation(fields: [permissionId], references: [id])
 
   @@unique([roleId, permissionId]) // Clave compuesta para evitar duplicados
 }
 
-model Resource {
+model resource {
   id          Int          @id @default(autoincrement())
   name        String
-  permissions Permission[] // Relación uno a muchos con permisos
+  route       String
+  permissions permission[] // Relación uno a muchos con permisos
 }
 
-model AuditLog {
+model auditLog {
   id        Int      @id @default(autoincrement())
   userId    Int
   action    String
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id])
+  user user @relation(fields: [userId], references: [id])
 }
