@@ -15,5 +15,5 @@ export class PaginationDto {
     @ApiPropertyOptional()
     @IsOptional({ each: true })
     @IsObject({ each: true })
-    filters?: []
+    filters?: Record<string, string>;
 };

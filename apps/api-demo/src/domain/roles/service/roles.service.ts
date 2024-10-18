@@ -2,6 +2,7 @@ import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateRoleDto } from '../dto/create-role.dto';
 import { UpdateRoleDto } from '../dto/update-role.dto';
 import { RoleRepository } from '../repository/roles.repository';
+import { PaginationDto } from 'src/common/dto/pagination.dto';
 
 
 @Injectable()
@@ -26,15 +27,52 @@ export class RolesService {
     }
   }
 
-  findAll() {
-    return `This action returns all roles`;
+  async getRoles(paginationDto : PaginationDto) {
+    try {
+      const process = await this.roleRepository.getRoles(paginationDto);
+
+      if(!process)
+        throw new UnprocessableEntityException('Ocurrio un error al obtener los roles');
+
+      return process;
+    }
+    catch(err){
+      if(err instanceof UnprocessableEntityException)
+        throw err;
+
+      throw new UnprocessableEntityException('Error al obtener los roles');
+    }
   }
 
-  update(id: number, updateRoleDto: UpdateRoleDto) {
-    return `This action updates a #${id} role`;
+  async updateRole(id: number, updateRoleDto: UpdateRoleDto) {
+    try {
+      const process = await this.roleRepository.updateRole(id, updateRoleDto);
+      if(!process)
+        throw new UnprocessableEntityException('Ocurrio un error al actualizar el rol');
+
+      return { message: 'Rol actualizado exitosamente' };
+    }
+    catch(err){
+      if(err instanceof UnprocessableEntityException)
+        throw err;
+
+      throw new UnprocessableEntityException('Error al actualizar el rol');
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} role`;
+  async removeRole(id: number) {
+    try {
+      const process = await this.roleRepository.removeRole(id);
+      if(!process)
+        throw new UnprocessableEntityException('Ocurrio un error al eliminar el rol');
+
+      return { message: 'Rol eliminaddo exitosamente' };
+    }
+    catch(err){
+      if(err instanceof UnprocessableEntityException)
+        throw err;
+
+      throw new UnprocessableEntityException('Error al actualizar el rol');
+    }
   }
 }

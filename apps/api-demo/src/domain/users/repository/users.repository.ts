@@ -37,38 +37,67 @@ export class UsersRepository {
 
   async getUsers(paginationDto: PaginationDto) {
     const { page, perPage, filters } = paginationDto;
+    const where = {};
+    const select = {};
+    const orderBy = {};
+    const options = { page, perPage };    
+    const searchTerms = filters?.['filter']?.trim().split(' ') || [];
 
-    const where = [];
+    where['deleteAt'] = null;
 
-    if (filters?.['filter']) {
-      where.push({
+    where['OR'] = [
+      {
         username: {
-          contains: filters?.['filter'],
+          contains: filters?.['filter'] || '',
+          mode: 'insensitive',
         },
-      });
-    }
-
-    where.push({
-      deleteAt: null,
-    });
-
-    const options = { page, perPage };
-    const args = {
-      where,
-      select: {
-        id: true,
-        username: true,
-        email: true,
-        name: true,
-        lastName: true,
+      },
+      {
+        email: {
+          contains: filters?.['filter'] || '',
+          mode: 'insensitive',
+        },
+      },
+      {
+        name: {
+          contains: searchTerms[0] || '',  // El primer término
+          mode: 'insensitive',
+        },
+      },
+      {
+        lastName: {
+          contains: searchTerms[1] || searchTerms[0] || '',  // El segundo término, o si no hay, el primero
+          mode: 'insensitive',
+        },
+      },
+      {
         role: {
-          select: {
-            id: true,
-            name: true,
+          name: {
+            contains: filters?.['filter'] || '',
+            mode: 'insensitive',
           },
         },
       },
-      orderBy: { id: 'asc' },
+    ];
+     
+    select['id'] = true;
+    select['username'] = true;
+    select['email'] = true;
+    select['name'] = true;
+    select['lastName'] = true;
+    select['role'] = {
+      select: {
+        id: true,
+        name: true,
+      },
+    };
+
+    orderBy['id'] = 'asc';
+
+    const args = {
+      where,
+      select,
+      orderBy,
     };
 
     // Usamos el PaginationService para paginar los resultados

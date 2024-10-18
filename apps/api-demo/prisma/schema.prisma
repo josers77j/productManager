@@ -33,6 +33,8 @@ model role {
   id   Int    @id @default(autoincrement())
   name String @unique
 
+  createdAt DateTime?  
+  deleteAt  DateTime?
   users       user[] // Relación uno a muchos con usuarios
   permissions rolePermission[] // Relación muchos a muchos con permisos
 }
@@ -43,6 +45,8 @@ model permission {
   description String?
   resourceId  Int
 
+  createdAt DateTime?  
+  deleteAt  DateTime?
   resource resource         @relation(fields: [resourceId], references: [id])
   roles    rolePermission[] // Relación muchos a muchos con roles
 }
@@ -52,6 +56,8 @@ model rolePermission {
   roleId       Int
   permissionId Int
 
+  createdAt DateTime?  
+  deleteAt  DateTime?
   role       role       @relation(fields: [roleId], references: [id])
   permission permission @relation(fields: [permissionId], references: [id])
 
@@ -62,6 +68,9 @@ model resource {
   id          Int          @id @default(autoincrement())
   name        String
   route       String
+
+  createdAt DateTime?  
+  deleteAt  DateTime?
   permissions permission[] // Relación uno a muchos con permisos
 }
 

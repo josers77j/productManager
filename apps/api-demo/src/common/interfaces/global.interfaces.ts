@@ -3,3 +3,10 @@ export interface IRole {
     name: string;
     description: string;
 }
+
+export interface JwtPayload {
+    sub: number;
+    username: string;
+    role: string;
+  }
+  
