@@ -11,6 +11,7 @@ import { routes } from './routes/routes';
 import { AuthModule } from './domain/auth/auth.module';
 import { PrismaService } from 'prisma/prisma.service';
 import { RolesModule } from './domain/roles/roles.module';
+import { PermissionModule } from './domain/permission/permission.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { RolesModule } from './domain/roles/roles.module';
     RouterModule.register(routes),
     AuthModule,
     RolesModule,
+    PermissionModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],
