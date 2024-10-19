@@ -27,9 +27,41 @@ export class PermissionRepository {
         const { page, perPage, filters } = paginationDto;
         const where = {};
         const orderBy = {};
+        const select = {};
         const options = { page, perPage };
+
+
+        select['id'] = true;
+        select['action'] = true;
+        select['description'] = true;
+        select['resource'] = {
+            select: {
+              id: true,
+              name: true,
+              route: true,
+            },
+          };
+
+        where['OR'] = [
+            {
+                action: {
+                    contains: filters?.['filter'] || '',
+                    mode: 'insensitive'
+                },
+            },
+            {
+                description: {
+                    contains: filters?.['filter'] || '',
+                    mode: 'insensitive'
+                }
+            }
+        ]
+
+        where['deleteAt'] = null;
+
         const args = {
             where,
+            select,
             orderBy
         }
         return this.paginate.paginate<permission, typeof args>(

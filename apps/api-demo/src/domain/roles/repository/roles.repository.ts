@@ -6,6 +6,7 @@ import { role } from "@prisma/client";
 import { PaginationService } from "src/utils/pagination.service.utils";
 import { UpdateRoleDto } from "../dto/update-role.dto";
 import { dateTimeNow } from "src/utils/date-time-now.utils";
+import { CreateRolePermissionDto } from "../dto/createRolePermission.dto";
 
 @Injectable()
 export class RoleRepository{
@@ -63,6 +64,56 @@ export class RoleRepository{
 
     async removeRole(id: number){
         return await this.prismaService.role.update({
+            where: {
+                id
+            },
+            data: {
+                deleteAt: dateTimeNow()
+            }
+        })
+    }
+
+    async getRolePermissions(roleId: number){
+        return await this.prismaService.rolePermission.findMany({
+            where: {
+                roleId
+            },
+            select: {
+                permission: true,
+                role:{
+                    select: {
+                        id: true,
+                        name: true                        
+                    }
+                }
+            }
+        })
+    }
+
+    async createRolePermission(createRolePermissionDto: CreateRolePermissionDto){
+        const { roleId, permissionId } = createRolePermissionDto;
+        return await this.prismaService.rolePermission.create({
+            data: {
+                roleId,
+                permissionId,
+                createdAt: dateTimeNow()
+            }
+        })
+    }
+
+    async updateRolePermission(id: number, updateRolePermissionDto: CreateRolePermissionDto){
+        return await this.prismaService.rolePermission.update({
+            where: {
+                id
+            },
+            data: {
+                ...updateRolePermissionDto
+            }
+        })
+    }
+
+    async removeRolePermission(id: number){
+        return await this.prismaService.rolePermission.update({
             where: {
                 id
             },

@@ -1,5 +1,6 @@
 import { Routes } from '@nestjs/core';
 import { AuthModule } from 'src/domain/auth/auth.module';
+import { PermissionModule } from 'src/domain/permission/permission.module';
 import { ProductsModule } from 'src/domain/products/products.module';
 import { RolesModule } from 'src/domain/roles/roles.module';
 import { UsersModule } from 'src/domain/users/users.module';
@@ -35,6 +36,10 @@ const routes: Routes = [
     {
         path : 'role',
         module : RolesModule
+    },
+    {
+        path : 'permission',
+        module : PermissionModule
     }
 ];
 
