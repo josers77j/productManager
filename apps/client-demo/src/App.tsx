@@ -1,18 +1,18 @@
-import axios from "axios";
+import React from 'react';
+import { Route, Routes } from 'react-router-dom';
+import AuthPage from './modules/auth/auth-page';
+import Layout from './components/layout';
 
-function App() {
 
+const App: React.FC = () => {
   return (
-    <button onClick={ async ()=>{
-      const response = await axios.get('http://localhost:5000/api/v1/product');
-      const data = await response.data();
-      console.log(data);
-      console.log('jolaaaa');
-      
-    }}>
-      click meeee
-    </button>
-  )
-}
+    <Layout>
+      <Routes>
+        <Route path="/" element={<AuthPage />} />
+        <Route path="*" element={<h1>Página no encontrada</h1>} />
+      </Routes>
+    </Layout>
+  );
+};
 
-export default App
+export default App;
