@@ -13,10 +13,12 @@ export class ResourceRepository {
     private readonly paginate: PaginationService,
   ) {}
 
-  createResource(createResourceDto: CreateResourceDto) {
-    this.prismaService.resource.create({
+  async createResource(createResourceDto: CreateResourceDto) {
+    const {name, route } = createResourceDto
+    return await this.prismaService.resource.create({
       data: {
-        ...createResourceDto,
+        name,
+        route,
         createdAt: dateTimeNow(),
       },
     });

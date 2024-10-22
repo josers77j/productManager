@@ -1,11 +1,25 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { CreateResourceDto } from '../dto/create-resource.dto';
 import { UpdateResourceDto } from '../dto/update-resource.dto';
+import { ResourceRepository } from '../repository/resource.repository';
 
 @Injectable()
 export class ResourceService {
-  create(createResourceDto: CreateResourceDto) {
-    return 'This action adds a new resource';
+
+  constructor(private readonly resourceRepository : ResourceRepository) {}
+
+  async createResource(createResourceDto: CreateResourceDto) {
+    try{
+      const process =  await this.resourceRepository.createResource(createResourceDto);
+
+      if(!process) throw new UnprocessableEntityException('Error creating resource');
+
+      return { message: 'Resource created successfully' };
+    }catch(error){
+      if(error instanceof UnprocessableEntityException) throw error;
+
+      throw new UnprocessableEntityException('Error creating resource');
+    }
   }
 
   findAll() {

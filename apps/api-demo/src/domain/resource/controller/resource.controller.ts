@@ -20,8 +20,8 @@ export class ResourceController {
   constructor(private readonly resourceService: ResourceService) {}
 
   @Post()
-  create(@Body() createResourceDto: CreateResourceDto) {
-    return this.resourceService.create(createResourceDto);
+  createResource(@Body() createResourceDto: CreateResourceDto) {
+    return this.resourceService.createResource(createResourceDto);
   }
 
   @Get()
