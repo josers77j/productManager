@@ -12,7 +12,7 @@ import {
 import { CreateResourceDto } from '../dto/create-resource.dto';
 import { UpdateResourceDto } from '../dto/update-resource.dto';
 import { ResourceService } from '../service/resource.service';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthGuard } from 'src/domain/auth/guard/auth.guard';
 
 @UseGuards(AuthGuard)
 @Controller()

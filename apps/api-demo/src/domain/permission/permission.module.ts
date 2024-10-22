@@ -8,6 +8,12 @@ import { PermissionRepository } from './repository/permission.repository';
 
 @Module({
   controllers: [PermissionController],
-  providers: [PermissionService, PrismaService, JwtService, PaginationService, PermissionRepository],
+  providers: [
+    PermissionService,
+    PrismaService,
+    JwtService,
+    PaginationService,
+    PermissionRepository,
+  ],
 })
 export class PermissionModule {}
