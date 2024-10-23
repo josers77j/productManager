@@ -9,7 +9,6 @@ export interface LoginRequest {
     username: string;
     password: string;
 }
-
 const API_URL = import.meta.env.VITE_API_URL;
 
 export class AuthService {

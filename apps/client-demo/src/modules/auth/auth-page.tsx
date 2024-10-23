@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Button, FormControl, FormLabel, Heading, Input, Stack, Text } from '@chakra-ui/react';
+import { Box, Button, FormControl, FormLabel, Heading, Input, Stack, Text, useToast,  } from '@chakra-ui/react';
 import { AuthService } from './auth-service';
+
+import { useNavigate } from 'react-router-dom';
 
 const AuthPage: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -9,6 +11,8 @@ const AuthPage: React.FC = () => {
     const [loading, setLoading] = useState(false);
     const [validationErrors, setValidationErrors] = useState<{ username?: string; password?: string }>({});
 
+    const toast = useToast();
+    const navigate= useNavigate();
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
@@ -34,9 +38,19 @@ const AuthPage: React.FC = () => {
         try {
             const data = await AuthService.login({ username, password });
             console.log('Inicio de sesión exitoso:', data);
+           
+            navigate('/dashboard');
             // Aquí puedes redirigir al usuario o guardar el token
         } catch (err: any) {
             setError(err.message);
+            toast({
+                title: 'Error al iniciar sesión',
+                description: error,
+                status: 'error',
+                duration: 5000,
+                isClosable: true,
+                position: 'top-right',
+            });
         } finally {
             setLoading(false);
         }
@@ -48,13 +62,6 @@ const AuthPage: React.FC = () => {
                 <Heading as="h2" size="lg" mb={6}>
                     Iniciar sesión en la plataforma
                 </Heading>
-
-                {/* Mostrar mensaje de error general */}
-                {error && (
-                    <Box bg="red.500" color="white" p={3} mb={4} borderRadius="md">
-                        <Text>{error}</Text>
-                    </Box>
-                )}
 
                 <form onSubmit={handleLogin}>
                     <Stack spacing={4}>
