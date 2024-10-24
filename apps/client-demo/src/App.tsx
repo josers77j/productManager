@@ -7,12 +7,8 @@ const App: React.FC = () => {
   return (
     <Layout>
       <Routes>
-        {routes.map((route, index) => (
-          <Route 
-            key={index} 
-            path={route.path} 
-            element={React.createElement(route.component)} // Aquí usamos React.createElement para crear el componente
-          />
+        {routes.map((route) => (
+          <Route key={route.path} path={route.path} element={<route.component />} />
         ))}
       </Routes>
     </Layout>

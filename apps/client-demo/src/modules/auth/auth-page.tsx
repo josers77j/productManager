@@ -38,7 +38,7 @@ const AuthPage: React.FC = () => {
         try {
             const data = await AuthService.login({ username, password });
             console.log('Inicio de sesión exitoso:', data);
-           
+
             navigate('/dashboard');
             // Aquí puedes redirigir al usuario o guardar el token
         } catch (err: any) {
