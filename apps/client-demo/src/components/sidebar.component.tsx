@@ -1,7 +1,8 @@
 import { Box, VStack, Link, Text, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import {
-  FaHome, FaGift
+  FaHome, FaGift,
+  FaUser
 } from 'react-icons/fa';
 
 const Sidebar: React.FC = () => {
@@ -20,34 +21,35 @@ const Sidebar: React.FC = () => {
           Modulos
         </Text>
 
-        <NavLink to="/" style={{ textDecoration: 'none' }}>
+        <NavLink to="/dashboard" style={{ textDecoration: 'none' }}>
           <Link
             display="flex"
             alignItems="center"
             py="3"
             px="4"
             borderRadius="md"
-            bgGradient="linear(to-r, sky.600, cyan.400)"
             color="white"
-            _hover={{ bgGradient: 'linear(to-r, cyan.900, sky.900)' }}
+            bg={window.location.pathname === '/dashboard' ? 'gray.600' : 'transparent'}
+            _hover={{ bg: 'gray.100', color: 'gray.800' }}
           >
             <Icon as={FaHome} mr="4" />
             <Text>Inicio</Text>
           </Link>
         </NavLink>
 
-        <NavLink to="/recompensas" style={{ textDecoration: 'none' }}>
+        <NavLink to="/users" style={{ textDecoration: 'none' }}>
           <Link
             display="flex"
             alignItems="center"
             py="3"
             px="4"
             borderRadius="md"
-            color="gray.400"
-            _hover={{ bg: 'gray.100', color: 'gray.800' }}
+            color="white"
+            bg={window.location.pathname === '/users' ? 'gray.600' : 'transparent'}
+            _hover={{ bg: 'gray.300', color: 'gray.800' }}
           >
-            <Icon as={FaGift} mr="4" />
-            <Text>Recompensas</Text>
+            <Icon as={FaUser} mr="4" />
+            <Text>usuarios</Text>
           </Link>
         </NavLink>
 

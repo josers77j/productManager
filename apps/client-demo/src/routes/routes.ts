@@ -2,11 +2,13 @@ import AuthPage from "../modules/auth/auth-page";
 import NotFound from "../modules/exceptions/not-found.exception";
 
 import dashboardPage from "../modules/dashboard/dashboard-page";
+import UserPage from "../modules/admin/users/user-page";
 
 
 const routes = [
   { path: '/', component: AuthPage, module: 'auth' }, // Ruta de autenticación
   { path: '/dashboard', component: dashboardPage, module: 'dashboard' },
+  { path : '/users', component: UserPage, module: 'users' },
   { path: '*', component: NotFound, module: 'about' },
 
   // Agrega más rutas según sea necesario
