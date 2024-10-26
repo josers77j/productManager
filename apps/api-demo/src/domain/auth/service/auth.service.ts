@@ -23,13 +23,15 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid password');
     }
-    const payload = { userId: user.id ,email: user.email, username: user.username, name: user.name, lastName: user.lastName };
+
+    delete user.password;
+
+    const payload = { user };
 
     const token = await this.jwtService.signAsync(payload);
 
     return {
-      token: token,
-      email: user.email,
+      token,
     };
   }
 }

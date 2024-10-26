@@ -62,7 +62,6 @@ export class UsersController {
     getUserProfile(
         @ExtractUser() user: UserPayload
     ){
-        console.log(user);
         return this.usersService.getUserProfile(user);
     }
 

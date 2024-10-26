@@ -23,18 +23,50 @@ export class UsersRepository {
       where: {
         AND: [
           {
-            username,
+            username, // Filtra por el nombre de usuario
           },
           {
-            deleteAt: null,
+            deleteAt: null, // Asegúrate de que este campo exista en tu modelo
           },
         ],
       },
-      include: {
-        role: true,
+      select: {
+        id: true,
+        username: true,
+        email: true,
+        name: true,
+        lastName: true,
+        password: true,        
+        role: {
+          select: {
+            id: true,
+            name: true,
+            permissions: {
+              select: {
+                id: true,
+                permission: {
+                  select: {
+                    id: true,
+                    action: true,
+                    description: true,
+                    resource: {
+                      select: {
+                        id: true,
+                        name: true,
+                        route: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
   }
+  
+  
 
   async getUsers(paginationDto: PaginationDto) {
     const { page, perPage, filters } = paginationDto;
@@ -169,14 +201,26 @@ export class UsersRepository {
   }
 
   async getUserProfile(user:UserPayload){
-    const {id} = user;
-    console.log("userId", id);
+    const {userId} = user;
+    console.log("userId", userId);
     return await this.prismaService.user.findFirst({
       where:{
-        id: +id,
+        id: +userId,
       },
       include:{
-        role:true,
+        role: {
+          include:{
+            permissions: {
+              include:{
+                permission: {
+                  include:{
+                    resource: true,
+                  }
+                }
+              }
+            },
+          }
+        },
       }
     });
   }
