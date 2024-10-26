@@ -10,6 +10,7 @@ import { dateTimeNow } from 'src/utils/date-time-now.utils';
 import { user } from '@prisma/client';
 import { PaginationService } from 'src/utils/pagination.service.utils';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
+import { UserPayload } from 'src/common/interfaces/global.interfaces';
 
 @Injectable()
 export class UsersRepository {
@@ -40,7 +41,7 @@ export class UsersRepository {
     const where = {};
     const select = {};
     const orderBy = {};
-    const options = { page, perPage };    
+    const options = { page, perPage };
     const searchTerms = filters?.['filter']?.trim().split(' ') || [];
 
     where['deleteAt'] = null;
@@ -79,7 +80,7 @@ export class UsersRepository {
         },
       },
     ];
-     
+
     select['id'] = true;
     select['username'] = true;
     select['email'] = true;
@@ -115,7 +116,7 @@ export class UsersRepository {
       data: {
         ...createUserDto,
         createdAt: dateTimeNow(),
-      },            
+      },
     });
   }
 
@@ -164,6 +165,19 @@ export class UsersRepository {
       data: {
         deleteAt: dateTimeNow(),
       },
+    });
+  }
+
+  async getUserProfile(user:UserPayload){
+    const {id} = user;
+    console.log("userId", id);
+    return await this.prismaService.user.findFirst({
+      where:{
+        id: +id,
+      },
+      include:{
+        role:true,
+      }
     });
   }
 }

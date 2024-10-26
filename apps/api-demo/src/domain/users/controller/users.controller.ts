@@ -6,6 +6,8 @@ import { passwordUserDto } from '../dto/password-user.dto';
 import { RoledUserDto } from '../dto/role-user.dto';
 import { PaginationDto } from 'src/common/dto/pagination.dto';
 import { AuthGuard } from 'src/domain/auth/guard/auth.guard';
+import { ExtractUser } from 'src/domain/auth/utils/jwt-extract.utils';
+import { UserPayload } from 'src/common/interfaces/global.interfaces';
 @UseGuards(AuthGuard)
 @Controller()
 export class UsersController {
@@ -13,7 +15,7 @@ export class UsersController {
 
   @Get()
   getUsers(
-    @Query() paginationDto : PaginationDto
+    @Query() paginationDto : PaginationDto,
   ) {
     return this.usersService.getUsers(paginationDto);
   }
@@ -26,11 +28,11 @@ export class UsersController {
   }
 
   @Patch(':id')
-  updateUser(    
+  updateUser(
     @Body() updateUser: UpdateUserDto,
     @Param('id') id: number
   ){
-    return this.usersService.updateUser(updateUser, id); 
+    return this.usersService.updateUser(updateUser, id);
   }
 
   @Patch('password/:id')
@@ -54,6 +56,14 @@ export class UsersController {
     @Param('id') id: number
   ){
     return this.usersService.deleteUser(+id);
-  } 
-  
+  }
+
+  @Get('profile')
+    getUserProfile(
+        @ExtractUser() user: UserPayload
+    ){
+        console.log(user);
+        return this.usersService.getUserProfile(user);
+    }
+
 }

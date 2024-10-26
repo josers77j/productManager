@@ -16,7 +16,7 @@ import { AuthGuard } from '../guard/auth.guard';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('profile')
+  @Get('')
   @UseGuards(AuthGuard)
   profile(@Request() req) {
     return req.user;
