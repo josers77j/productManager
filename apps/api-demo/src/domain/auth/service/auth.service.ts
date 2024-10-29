@@ -14,14 +14,10 @@ export class AuthService {
   async login({ username, password }: LoginDto) {
     const user = await this.usersService.findOneByUserName(username);
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid username');
-    }
-
     const isPasswordValid = await bcryptjs.compare(password, user.password);
 
-    if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+    if (!user || !isPasswordValid) {
+      throw new UnauthorizedException('usuario u contraseña invalidos, intente de nuevo.');
     }
 
     delete user.password;

@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, Logger, NotFoundException, UnprocessableEntityException } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, Logger, UnauthorizedException, UnprocessableEntityException } from '@nestjs/common';
 
 import * as bcrypt from 'bcrypt';
 import { UsersRepository } from '../repository/users.repository';
@@ -17,11 +17,11 @@ export class UsersService {
     try {
       const process = await this.userRepository.findOneByUserName(username);
       if (!process)
-        throw new NotFoundException('No se encontro el usuario o el usuario fue eliminado');
+        throw new UnauthorizedException('Usuario o contraseña invalidos, intente de nuevo');
       return process;
     } catch (err) {
       Logger.error(err);
-      if(err instanceof NotFoundException)
+      if(err instanceof UnauthorizedException)
         throw err;
       throw new InternalServerErrorException('Error al obtener el usuario');
     }

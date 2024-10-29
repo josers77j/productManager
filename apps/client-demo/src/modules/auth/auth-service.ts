@@ -14,9 +14,7 @@ export class AuthService {
     } catch (err: any) {
       if (err.response) {
         if (err.response.status === 401) {
-          throw new Error('Contraseña inválida.');
-        } else if (err.response.status === 404) {
-          throw new Error('No se encontró el usuario o fue eliminado.');
+          throw new Error('usuario u contraseña invalidos.');
         }
         throw new Error('Error desconocido. Por favor, intenta nuevamente.');
       } else {

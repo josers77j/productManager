@@ -1,7 +1,7 @@
 import { Box, VStack, Link, Text, Icon } from '@chakra-ui/react';
 import { NavLink } from 'react-router-dom';
 import {
-  FaHome, FaGift,
+  FaHome,
   FaUser
 } from 'react-icons/fa';
 

@@ -7,12 +7,13 @@ import { BrowserRouter } from 'react-router-dom';
 import { AuthProvider } from './modules/auth/auth-provider.tsx';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <ChakraProvider>
-    <BrowserRouter>
-    <AuthProvider>
-        <App />
-    </AuthProvider>
-    </BrowserRouter>
-  </ChakraProvider>,
+  <React.StrictMode>
+    <ChakraProvider>
+      <BrowserRouter>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </BrowserRouter>
+    </ChakraProvider>
+  </React.StrictMode>
 );
-

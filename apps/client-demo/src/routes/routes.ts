@@ -1,17 +1,13 @@
 import AuthPage from "../modules/auth/auth-page";
 import NotFound from "../modules/exceptions/not-found.exception";
-
-import dashboardPage from "../modules/dashboard/dashboard-page";
+import DashboardPage from "../modules/dashboard/dashboard-page";
 import UserPage from "../modules/admin/users/user-page";
 
-
 const routes = [
-  { path: '/', component: AuthPage, module: 'auth' }, // Ruta de autenticación
-  { path: '/dashboard', component: dashboardPage, module: 'dashboard' },
-  { path : '/users', component: UserPage, module: 'users' },
-  { path: '*', component: NotFound, module: 'about' },
-
-  // Agrega más rutas según sea necesario
+  { path: '/', component: AuthPage, module: 'auth', protected: false },
+  { path: '/dashboard', component: DashboardPage, module: 'dashboard', protected: false, action: 'ACCESS', route: '/dashboard' },
+  { path: '/users', component: UserPage, module: 'users', protected: true, action: 'READ', route: '/api/users' },
+  { path: '*', component: NotFound, module: 'notFound', protected: false },
 ];
 
 export default routes;
