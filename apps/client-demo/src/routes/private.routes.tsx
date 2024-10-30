@@ -14,7 +14,7 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ requiredPermission }) =
     return <Navigate to="/" state={{ from: location }} replace />;
   }
 
-  if (!hasPermission(requiredPermission.action, requiredPermission.route)) {
+  if (!hasPermission(requiredPermission.action, requiredPermission.route)) {    
     return <Navigate to="/access-denied" replace />;
   }
 

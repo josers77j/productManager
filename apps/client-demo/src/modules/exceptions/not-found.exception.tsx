@@ -27,15 +27,15 @@ const NotFound: React.FC = () => {
         />
         {/* Título */}
         <Heading as="h1" size="2xl">
-          Page not found
+        ups! Pagina no encontrada :/
         </Heading>
         {/* Descripción */}
         <Text fontSize="lg" color="gray.400">
-          Oops! Looks like you followed a bad link. If you think this is a problem with us, please tell us.
+          Parece que has intentado acceder a una pagina inexistente. Si consideras que esto es un problema, contacta con el administrador.
         </Text>
         {/* Botón */}
         <Button colorScheme="blue" onClick={handleGoHome}>
-          Go back home
+          Volver al inicio
         </Button>
       </VStack>
     </Box>

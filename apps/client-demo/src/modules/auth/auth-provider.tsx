@@ -3,11 +3,15 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { AuthService } from './auth-service';
 
 // Define interfaces para User y TokenPayload
-interface Permission {
+interface PermissionDetail {
   action: string;
   resource: {
     route: string;
   };
+}
+
+interface Permission {
+  permission: PermissionDetail;
 }
 
 interface Role {
@@ -26,6 +30,8 @@ interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
   hasPermission: (action: string, route: string) => boolean;
+  login: (username: string, password: string) => Promise<void>;
+  logout: () => void;
 }
 
 interface AuthProviderProps {
@@ -47,21 +53,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = async (username: string, password: string) => {
     const response = await AuthService.login({ username, password });
-    const token = response.token; // Suponiendo que el token está en la respuesta
-    localStorage.setItem('token', token); // Almacena el token
+    const token = response.token;
+    localStorage.setItem('token', token);
     const decoded = jwtDecode<TokenPayload>(token);
-    setUser(decoded.user); // Actualiza el estado del usuario
+    setUser(decoded.user);
   };
 
   const logout = () => {
     AuthService.logout();
-    setUser(null); // Elimina el usuario del estado
+    setUser(null);
   };
 
   const hasPermission = (action: string, route: string) => {
     if (!user || !user.role) return false;
+    console.log(user, 'useeeeeeer');
+    console.log(action, route, 'lo que se vieneee');
+    console.log(user.role.permissions , 'pemisosss');
+    console.log(user.role.permissions.some(
+      (perm) =>
+        perm.permission.action === action && perm.permission.resource.route === route
+    ), 'permisitos acaaaaaaaaaa')
     return user.role.permissions.some(
-      (perm) => perm.action === action && perm.resource.route === route
+      (perm) =>
+        perm.permission.action === action && perm.permission.resource.route === route
     );
   };
 
@@ -71,6 +85,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (!context) throw new Error("useAuth must be used within an AuthProvider");
+  if (!context) throw new Error("useAuth debe ser usado dentro de un AuthProvider");
   return context;
 };

@@ -1,47 +1,31 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Box, Button, FormControl, FormLabel, Heading, Input, Stack, Text, useToast } from '@chakra-ui/react';
-
+import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from './auth-provider';
 
+interface LoginFormInputs {
+  username: string;
+  password: string;
+}
+
 const AuthPage: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [validationErrors, setValidationErrors] = useState<{ username?: string; password?: string }>({});
-  const [loading, setLoading] = useState(false);
-  const { isAuthenticated } = useAuth();
-
-
-  const { login } = useAuth();
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormInputs>();
+  const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
     if (isAuthenticated) {
-        navigate('/dashboard'); // Redirige al dashboard si el usuario ya está autenticado
+      navigate('/dashboard');
     }
-}, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate]);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    const errors: { username?: string; password?: string } = {};
-    if (!username) errors.username = 'El nombre de usuario es obligatorio';
-    if (!password) errors.password = 'La contraseña es obligatoria';
-
-    if (Object.keys(errors).length > 0) {
-      setValidationErrors(errors);
-      return;
-    }
-
-    setValidationErrors({});
-    setLoading(true);
-
+  const onSubmit = async (data: LoginFormInputs) => {
     try {
-      await login(username, password);
-      navigate('/dashboard'); // Redirigir tras inicio de sesión exitoso
+      await login(data.username, data.password);
+      navigate('/dashboard');
     } catch (err: any) {
-        console.error(err);
       toast({
         title: 'Error al iniciar sesión',
         description: err.message,
@@ -50,8 +34,6 @@ const AuthPage: React.FC = () => {
         isClosable: true,
         position: 'top-right',
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -61,43 +43,39 @@ const AuthPage: React.FC = () => {
         <Heading as="h2" size="lg" mb={6}>
           Iniciar sesión en la plataforma
         </Heading>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={4}>
-            <FormControl isInvalid={!!validationErrors.username}>
+            <FormControl isInvalid={!!errors.username}>
               <FormLabel htmlFor="username">Usuario</FormLabel>
               <Input
                 type="text"
                 id="username"
                 placeholder="usuario123"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                borderColor={validationErrors.username ? 'red.500' : 'gray.300'}
+                {...register('username', { required: 'El nombre de usuario es obligatorio' })}
               />
-              {validationErrors.username && (
+              {errors.username && (
                 <Text color="red.500" fontSize="sm">
-                  {validationErrors.username}
+                  {errors.username.message}
                 </Text>
               )}
             </FormControl>
 
-            <FormControl isInvalid={!!validationErrors.password}>
+            <FormControl isInvalid={!!errors.password}>
               <FormLabel htmlFor="password">Contraseña</FormLabel>
               <Input
                 type="password"
                 id="password"
                 placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                borderColor={validationErrors.password ? 'red.500' : 'gray.300'}
+                {...register('password', { required: 'La contraseña es obligatoria' })}
               />
-              {validationErrors.password && (
+              {errors.password && (
                 <Text color="red.500" fontSize="sm">
-                  {validationErrors.password}
+                  {errors.password.message}
                 </Text>
               )}
             </FormControl>
 
-            <Button type="submit" colorScheme="blue" width="full" isLoading={loading} loadingText="Cargando">
+            <Button type="submit" colorScheme="blue" width="full" isLoading={isSubmitting} loadingText="Cargando">
               Iniciar sesión
             </Button>
           </Stack>
