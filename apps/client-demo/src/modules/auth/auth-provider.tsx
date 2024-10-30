@@ -66,18 +66,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const hasPermission = (action: string, route: string) => {
     if (!user || !user.role) return false;
-    console.log(user, 'useeeeeeer');
-    console.log(action, route, 'lo que se vieneee');
-    console.log(user.role.permissions , 'pemisosss');
-    console.log(user.role.permissions.some(
-      (perm) =>
-        perm.permission.action === action && perm.permission.resource.route === route
-    ), 'permisitos acaaaaaaaaaa')
-    return user.role.permissions.some(
+    const process= user.role.permissions.some(
       (perm) =>
         perm.permission.action === action && perm.permission.resource.route === route
     );
+    console.log(`Access for ${action} ${route}:`, process);
+    return process;
   };
+  
 
   const value = { user, isAuthenticated: !!user, hasPermission, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
