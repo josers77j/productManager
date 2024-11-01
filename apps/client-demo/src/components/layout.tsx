@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Box, Flex, IconButton, useToast } from "@chakra-ui/react";
 import { FaBars, FaTimes } from "react-icons/fa";
 import Sidebar from "./sidebar.component";
@@ -7,12 +7,13 @@ import { motion } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [isSidebarOpen, setSidebarOpen] = useState<boolean>(true);
+  const [isSidebarOpen, setSidebarOpen] = useState(true);
+  let isAnimating = false;
+
   const location = useLocation();
   const toast = useToast();
   const navigate = useNavigate();
-
-  let timeout: string | number | NodeJS.Timeout | undefined;
+  const timeoutRef = useRef<NodeJS.Timeout>();
   const sessionExpirationTime = 150 * 60 * 1000; // 5 minutos de inactividad
 
   // Rutas donde el Sidebar y el Navbar son visibles
@@ -23,16 +24,24 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const shouldShowSidebar = pathsWithSidebar.includes(location.pathname);
   const shouldShowNavbar = pathsWithNavbar.includes(location.pathname);
 
-  const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
+  const toggleSidebar = () => {
+    if (isAnimating) return; // Si ya está animando, no hace nada
+    isAnimating = true;
+
+    setSidebarOpen((prev) => !prev);
+
+    // Restablece isAnimating una vez que termina la animación
+    setTimeout(() => {
+      isAnimating = false;
+    }, 300); // Ajusta el tiempo al de la animación real del sidebar
+  };
 
   const resetTimer = () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => {
-      // Limpiar la sesión después de 5 minutos de inactividad
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
       localStorage.clear();
-      navigate('/'); // Redirigir al login
-
-      // Mostrar un toast cuando se cierre la sesión
+      navigate('/');
       toast({
         title: 'Sesión cerrada por inactividad.',
         description: 'Has sido desconectado por inactividad.',
@@ -45,14 +54,13 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   useEffect(() => {
-    // Monitorear la actividad del usuario
     window.onload = resetTimer;
     document.onmousemove = resetTimer;
     document.onkeypress = resetTimer;
     document.onclick = resetTimer;
 
     return () => {
-      clearTimeout(timeout);
+      clearTimeout(timeoutRef.current);
     };
   }, []);
 
@@ -93,11 +101,9 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             zIndex="1"
             position="fixed"
             height="100vh"
-            transition="transform 0.3s ease, opacity 0.3s ease"
-            initial={{ transform: "translateX(-100%)", opacity: 0 }}
+            transition="opacity 0.3s"
             animate={{
-              transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)",
-              opacity: isSidebarOpen ? 1 : 0,
+              transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)"
             }}
           >
             <Sidebar />

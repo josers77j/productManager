@@ -24,7 +24,6 @@ const AuthPage: React.FC = () => {
   const onSubmit = async (data: LoginFormInputs) => {
     try {
       await login(data.username, data.password);
-      navigate('/dashboard');
     } catch (err: any) {
       toast({
         title: 'Error al iniciar sesión',
@@ -36,6 +35,7 @@ const AuthPage: React.FC = () => {
       });
     }
   };
+
 
   return (
     <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center" height="100vh" bg="gray.900">

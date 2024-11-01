@@ -70,10 +70,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       (perm) =>
         perm.permission.action === action && perm.permission.resource.route === route
     );
-    console.log(`Access for ${action} ${route}:`, process);
+
     return process;
   };
-  
+
 
   const value = { user, isAuthenticated: !!user, hasPermission, login, logout };
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

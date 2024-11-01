@@ -1,4 +1,3 @@
-import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout'; // Asegúrate de que el path sea correcto
 import routes from './routes/routes';

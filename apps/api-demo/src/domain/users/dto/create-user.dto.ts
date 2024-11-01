@@ -1,33 +1,34 @@
-import { IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  MinLength,
+} from 'class-validator';
 
 export class CreateUserDto {
-  @IsString()  
+  @IsString()
   @IsNotEmpty()
   username: string;
 
-  @IsString()  
+  @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsString()  
+  @IsString()
   @IsNotEmpty()
   lastName: string;
 
-  @IsString()  
+  @IsString()
   @IsNotEmpty()
   email: string;
 
-  @IsString()  
+  @IsString()
   @IsNotEmpty()
   @MinLength(6)
   password: string;
 
-  @IsString()
-  @IsOptional()
-  role: {
-    connect: {
-      id: number;
-    };
-  };
-
-  }
+  @IsNumber()
+  @IsNotEmpty()
+  roleId: number;
+}
