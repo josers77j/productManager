@@ -8,8 +8,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
-  let isAnimating = false;
-
   const location = useLocation();
   const toast = useToast();
   const navigate = useNavigate();
@@ -17,24 +15,21 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const sessionExpirationTime = 150 * 60 * 1000; // 5 minutos de inactividad
 
   // Rutas donde el Sidebar y el Navbar son visibles
-  const pathsWithSidebar = ['/dashboard', '/users']; // Añade las rutas donde quieras mostrar el sidebar
-  const pathsWithNavbar = ['/dashboard', '/users', '/settings']; // Añade las rutas donde quieras mostrar el navbar
+  const pathsWithSidebar = ['/dashboard', '/users'];
+  const pathsWithNavbar = ['/dashboard', '/users', '/settings'];
 
   // Condiciones para mostrar Sidebar y Navbar
   const shouldShowSidebar = pathsWithSidebar.includes(location.pathname);
   const shouldShowNavbar = pathsWithNavbar.includes(location.pathname);
 
-
   const toggleSidebar = () => {
-    if (isAnimating) return; // Si ya está animando, no hace nada
-    isAnimating = true;
-
     setSidebarOpen((prev) => !prev);
+  };
 
-    // Restablece isAnimating una vez que termina la animación
-    setTimeout(() => {
-      isAnimating = false;
-    }, 300); // Ajusta el tiempo al de la animación real del sidebar
+  const closeSidebar = () => {
+    if (window.innerWidth < 768) { // Si es pantalla pequeña (base)
+      setSidebarOpen(false);
+    }
   };
 
   const resetTimer = () => {
@@ -66,13 +61,11 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <Box>
-      {/* Navbar visible solo en rutas especificadas */}
       {shouldShowNavbar && <Navbar />}
 
       <Flex>
-        {/* Botón para abrir/cerrar el sidebar */}
         {shouldShowSidebar && (
-          <IconButton
+          <IconButton 
             bg={"gray.900"}
             _hover={{ bg: "gray.600" }}
             aria-label="Toggle Sidebar"
@@ -93,11 +86,10 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           </IconButton>
         )}
 
-        {/* Sidebar con animación */}
         {shouldShowSidebar && (
           <Box
             as={motion.div}
-            w={{ base: "full", md: "250px" }} // En pantallas pequeñas, el sidebar ocupa el ancho completo
+            w={{ base: "full", md: "250px" }}
             zIndex="1"
             position="fixed"
             height="100vh"
@@ -106,16 +98,14 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
               transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)"
             }}
           >
-            <Sidebar />
+            <Sidebar onLinkClick={closeSidebar} /> {/* Pasar la función al sidebar */}
           </Box>
         )}
 
-        {/* Contenido principal ajustado */}
         <Box
           flex="1"
           py={shouldShowNavbar ? "70px" : "0"}
           transition="margin-left 0.3s ease"
-          // Si la pantalla es pequeña (base), no aplicar margen izquierdo
           marginLeft={{ base: "0", md: isSidebarOpen && shouldShowSidebar ? "250px" : "0" }}
           w="100%"
         >
