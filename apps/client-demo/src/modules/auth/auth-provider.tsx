@@ -1,6 +1,7 @@
 import { jwtDecode } from 'jwt-decode';
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { AuthService } from './auth-service';
+import { Center, Spinner } from '@chakra-ui/react';
 
 // Define interfaces para User y TokenPayload
 interface PermissionDetail {
@@ -42,13 +43,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-
+  const [isLoading, setIsLoading] = useState(true); 
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      const decoded = jwtDecode<TokenPayload>(token);
-      setUser(decoded.user);
+      try {
+        const decoded = jwtDecode<TokenPayload>(token);
+        setUser(decoded.user);
+
+      } catch (error) {
+        logout();
+      }
     }
+    setIsLoading(false); // Indica que la carga ha terminado
   }, []);
 
   const login = async (username: string, password: string) => {
@@ -60,6 +67,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('sessionStart');
     AuthService.logout();
     setUser(null);
   };
@@ -71,11 +80,22 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         perm.permission.action === action && perm.permission.resource.route === route
     );
 
+    
     return process;
   };
 
 
   const value = { user, isAuthenticated: !!user, hasPermission, login, logout };
+
+  if (isLoading) {
+    return (
+      <Center height="100vh" bg="gray.900">
+        <Spinner size="xl" color="blue.500" thickness="4px" />
+        <p style={{ color: 'white', marginTop: '16px' }}>Cargando...</p>
+      </Center>
+    );
+  }
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 

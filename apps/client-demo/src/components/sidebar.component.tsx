@@ -46,13 +46,18 @@ const Sidebar: React.FC = () => {
     },
   ];
 
-  const hasAccess = (resource: string, action: string) => {
-    return permissions.some(permission => {
-      return (
-        permission.permission.action === action
-      );
-    });
+  const hasAccess = (path: string, action: string) => {
+    return permissions.some(permission => (
+      permission.permission.action === action && permission.permission.resource.route === path
+    ));
   };
+
+  const filteredSections = sections
+    .map(section => ({
+      ...section,
+      links: section.links.filter(link => hasAccess(link.path, link.action)),
+    }))
+    .filter(section => section.links.length > 0);
 
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
@@ -64,7 +69,7 @@ const Sidebar: React.FC = () => {
         </Text>
 
         {/* Dashboard sin acordeón */}
-        {hasAccess('Dashboard', 'READ') && (
+        {hasAccess('/dashboard', 'ACCESS') && (
           <NavLink to="/dashboard" style={{ textDecoration: 'none' }}>
             <Link
               display="flex"
@@ -83,7 +88,7 @@ const Sidebar: React.FC = () => {
         )}
 
         <Accordion allowToggle>
-          {sections.map((section, index) => (
+          {filteredSections.map((section, index) => (
             <AccordionItem key={section.title} border="none">
               <AccordionButton
                 onClick={() => setOpenIndex(openIndex === index ? null : index)} // Alternar acordeón
@@ -94,28 +99,32 @@ const Sidebar: React.FC = () => {
                 </Box>
                 <AccordionIcon color="gray.100" />
               </AccordionButton>
-              <AccordionPanel pb={4}>
-                {section.links.map(link => {
-                  if (!hasAccess(link.resource, link.action)) return null;
-
-                  return (
-                    <NavLink to={link.path} key={link.label} style={{ textDecoration: 'none' }}>
-                      <Link
-                        display="flex"
-                        alignItems="center"
-                        py="2"
-                        px="4"
-                        borderRadius="md"
-                        color="white"
-                        bg={window.location.pathname === link.path ? 'gray.600' : 'transparent'}
-                        _hover={{ bg: 'gray.100', color: 'gray.800' }}
-                      >
-                        <Icon as={link.icon} mr="4" />
-                        <Text>{link.label}</Text>
-                      </Link>
-                    </NavLink>
-                  );
-                })}
+              <AccordionPanel
+                pb={4}
+                style={{
+                  transition: 'max-height 0.2s ease-out, opacity 0.2s ease-out',
+                  overflow: 'hidden',
+                  maxHeight: openIndex === index ? '1000px' : '0px', // Ajusta el valor según sea necesario
+                  opacity: openIndex === index ? 1 : 0, // Controla la opacidad
+                }}
+              >
+                {section.links.map(link => (
+                  <NavLink to={link.path} key={link.label} style={{ textDecoration: 'none' }}>
+                    <Link
+                      display="flex"
+                      alignItems="center"
+                      py="2"
+                      px="4"
+                      borderRadius="md"
+                      color="white"
+                      bg={window.location.pathname === link.path ? 'gray.600' : 'transparent'}
+                      _hover={{ bg: 'gray.100', color: 'gray.800' }}
+                    >
+                      <Icon as={link.icon} mr="4" />
+                      <Text>{link.label}</Text>
+                    </Link>
+                  </NavLink>
+                ))}
               </AccordionPanel>
             </AccordionItem>
           ))}
