@@ -46,6 +46,9 @@ const Paginator: React.FC<PaginatorProps> = ({ meta, onPageChange, onPerPageChan
         aria-label="Previous Page"
         mx={2}
       />
+      <Text>
+        Total de registros: <strong>{meta.total}</strong>
+      </Text>
             <IconButton
         icon={<FaChevronRight />}
         onClick={() => onPageChange(meta.currentPage + 1)}
@@ -62,11 +65,7 @@ const Paginator: React.FC<PaginatorProps> = ({ meta, onPageChange, onPerPageChan
         Página <strong>{meta.currentPage} de {meta.lastPage}</strong>
       </Text>
 
-
-      <Spacer />
-      <Text>
-        Total de usuarios: <strong>{meta.total}</strong>
-      </Text>
+      <Spacer />      
       <Spacer />
       <Select
         value={meta.perPage}
