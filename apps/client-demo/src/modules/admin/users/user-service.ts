@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const getUsers = async (page: number = 1, perPage: number = 10) => {
+const getUsers = async (page: number = 1, perPage: number = 10, searchTerm: string = '') => {
     const API_URL = import.meta.env.VITE_API_URL;
   try {
     const token = localStorage.getItem('token');
@@ -12,7 +12,8 @@ const getUsers = async (page: number = 1, perPage: number = 10) => {
     const response = await axios.get(`${API_URL}/user`, {
       params: {
         page,
-        perPage
+        perPage,
+        'filters[filter]': searchTerm        
       },
       headers: {
         Authorization: `Bearer ${token}`

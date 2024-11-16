@@ -15,8 +15,8 @@ const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const sessionExpirationTime = 150 * 60 * 1000; // 5 minutos de inactividad
 
   // Rutas donde el Sidebar y el Navbar son visibles
-  const pathsWithSidebar = ['/dashboard', '/users'];
-  const pathsWithNavbar = ['/dashboard', '/users', '/settings'];
+  const pathsWithSidebar = ['/dashboard', '/users', '/roles'];
+  const pathsWithNavbar = ['/dashboard', '/users', '/settings', '/roles'];
 
   // Condiciones para mostrar Sidebar y Navbar
   const shouldShowSidebar = pathsWithSidebar.includes(location.pathname);
